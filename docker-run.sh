@@ -1,4 +1,4 @@
-#!/usr/bin/env zsh
+#!/usr/bin/env bash
 
 #
 # This script simply executes a provided JavaScript test using
@@ -18,5 +18,4 @@ fi
 SCRIPT_NAME=$1
 TAG_NAME="$(basename -s .js $SCRIPT_NAME)-$(date +%s)"
 
-docker compose up -d
 docker compose run --rm -T k6 run -<$SCRIPT_NAME --tag testid=$TAG_NAME

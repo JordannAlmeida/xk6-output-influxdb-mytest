@@ -2,8 +2,8 @@ import http from 'k6/http';
 import { check, sleep } from 'k6';
 
 const environment = __ENV.TESTENV || 'prd';
-const applicationEnvironment = JSON.parse(openFormatedjson(`./parameters/application.${environment}.json`));
-const users = JSON.parse(openFormatedjson('./secrets/users.json'));
+const applicationEnvironment = JSON.parse(open(`/scripts/parameters/application.${environment}.json`));
+const users = JSON.parse(open('/scripts/secrets/users.json')); //Needs to receive objects like {"username": "teste", "password": "123456"}
 const maxDelaySleep = applicationEnvironment['sleep']['maxTimeDelay'] || 5;
 const minDelaySleep = applicationEnvironment['sleep']['minTimeDelay'] || 0.3;
 const authTokens = {};
@@ -53,10 +53,8 @@ export default function () {
             applicationEnvironment['endpointToTest']['route'],
             (
               headers ?
-              {
-                ...params,
-                "headers": headers
-              } : applicationEnvironment['endpointToTest']['params']
+              Object.assign({}, params, {"headers": headers}) : 
+              applicationEnvironment['endpointToTest']['params']
             )
   );
   check(res, {
