@@ -1,3 +1,9 @@
+# Brief
+
+This project can be used to do a load test into a website or API with k6. It will store test data into influxDb and we can see all metrics by grafana dashboard. This example is based on [Official solution](https://github.com/grafana/xk6-output-influxdb/tree/main)
+
+
+
 # xk6-output-influxdb
 k6 extension for [InfluxDB v2](https://docs.influxdata.com/influxdb/v2.0), it adds the support for the latest `v2` version and the compatibility API for v1.8+.
 
