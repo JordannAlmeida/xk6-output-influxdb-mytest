@@ -12,11 +12,6 @@ const getRandomTimeDelay = () => {
   return Math.random() * (maxDelaySleep - minDelaySleep + 1) + minDelaySleep;
 }
 
-export let options = {
-  stages: applicationEnvironment['stages'],
-  ext: applicationEnvironment['ext'],
-};
-
 const loginUser = (user) => {
   const loginRes = http.post(applicationEnvironment['authParams']['routeLogin'], {
     username: user.username,
@@ -29,6 +24,11 @@ const loginUser = (user) => {
 
   const authToken = loginRes.json('token');
   authTokens[user.username] = authToken;
+}
+
+export let options = {
+  stages: applicationEnvironment['stages'],
+  ext: applicationEnvironment['ext'],
 }
 
 export function setup() {
@@ -48,15 +48,10 @@ export default function () {
       Authorization: `Bearer ${authToken}`,
     };
   }
-  const params = applicationEnvironment['endpointToTest']['params'];
-  let res = http.get(
-            applicationEnvironment['endpointToTest']['route'],
-            (
-              headers ?
-              Object.assign({}, params, {"headers": headers}) : 
-              applicationEnvironment['endpointToTest']['params']
-            )
-  );
+  const params = headers ?
+                 Object.assign({}, applicationEnvironment['endpointToTest']['params'], {"headers": headers}) : 
+                 applicationEnvironment['endpointToTest']['params'];
+  let res = http.get(applicationEnvironment['endpointToTest']['route'], params);
   check(res, {
     'status is 200': (r) => r.status === 200,
     'response time is less than 500ms': (r) => r.timings.duration < 200
